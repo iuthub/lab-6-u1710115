@@ -1,25 +1,34 @@
 <?php 
-
+// .{2,}   2 more chars
 	$pattern="";
 	$text="";
 	$replaceText="";
-
+    $replaced_text = ""; 
 	$match="Not checked yet.";
 
+
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
+	
+
 	$pattern=$_POST["pattern"];
 	$text=$_POST["text"];
+	$replaceText=$_POST["replaceText"];
+
+	$replaced_text = preg_replace($pattern, $text, $replaceText);
+
+	preg_match($pattern, $text, $matched);
 
 	if(preg_match($pattern, $text)) {
 						$match="Match!";
+						$replaced_text = $matched[1];
+						print_r($matched);
 					} else {
 						$match="Does not match!";
-					}
+	//$not_digit = "[^\d\]";				
+	}
+    
 }
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 	<title>Valid Form</title>
 </head>
 <body>
-	<form action="valid_form.php" method="post">
+	<form action="regex_valid_form.php" method="post">
 		<dl>
 			<dt>Pattern</dt>
 			<dd><input type="text" name="pattern" value="<?= $pattern ?>"></dd>
@@ -41,6 +50,8 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 			<dt>Output Text</dt>
 			<dd><?=	$match ?></dd>
 
+			<dt>Output Text</dt>
+			<dd><?=	$replaced_text ?></dd>
 			<dt>&nbsp;</dt>
 			<dd><input type="submit" value="Check"></dd>
 		</dl>
